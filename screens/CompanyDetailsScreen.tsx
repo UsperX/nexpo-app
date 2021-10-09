@@ -6,6 +6,8 @@ import { Text, View } from '../components/Themed';
 import { Company } from '../api/companies'
 import { API } from '../api';
 import ScreenActivityIndicator from '../components/ScreenActivityIndicator';
+import {ArkadText} from "../components/StyledText";
+import Colors from "../constants/Colors";
 
 type CompanyDetailsScreenParams = {
   route: {
@@ -34,13 +36,18 @@ export default function CompanyDetailsScreen({ route }: CompanyDetailsScreenPara
     getCompany();
   }, []);
   
-  if (loading) {
+  if (loading || company == undefined) {
     return (<ScreenActivityIndicator />)
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{company?.name}</Text>
+      <View style={styles.nameContainer}>
+        <ArkadText
+            text={company?.name}
+            style={styles.name}
+        />
+      </View>
       <View style={styles.container}>
         
       </View>
@@ -80,5 +87,14 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 18,
     height: 44,
+  },
+  name: {
+    fontSize: 24,
+    color: Colors.darkBlue,
+  },
+  nameContainer: {
+    flexDirection: 'row',
+    marginTop: 40,
+    justifyContent: 'center'
   },
 });
