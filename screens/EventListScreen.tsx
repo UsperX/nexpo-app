@@ -1,24 +1,24 @@
 import * as React from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import { Text, View } from '../components/Themed';
-import { EventsParamlist } from '../types';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { API } from '../api';
-import { ListedEvent } from '../api/events';
-import { EventListItem } from '../components/eventList/EventListItem';
+import { Event } from '../api/events';
+import { EventList } from '../components/eventList/EventList';
+import { EventStackParamlist } from '../navigation/BottomTabNavigator';
 
 type EventsNavigation = {
   navigation: StackNavigationProp<
-  EventsParamlist,
+    EventStackParamlist,
     'EventListScreen'
-  >
+  >;
 };
 
 export default function CompaniesScreen({navigation}: EventsNavigation) {
   const [isLoading, setLoading] = React.useState<boolean>(true);
-  const [events, setEvents] = React.useState<ListedEvent[] | null>(null);
-  const [bookedEvents, setBookedEvents] = React.useState<ListedEvent[] | null>(null);
+  const [events, setEvents] = React.useState<Event[] | null>(null);
+  const [bookedEvents, setBookedEvents] = React.useState<Event[] | null>(null);
   
   const getEvents = async () => {
     setLoading(true);
@@ -43,28 +43,18 @@ export default function CompaniesScreen({navigation}: EventsNavigation) {
     <View style={styles.container}>
       {isLoading 
         ? <Text>Loading...</Text>
-        : <FlatList
-          data={events}
-          keyExtractor={({ id }) => id.toString()}
-          renderItem={({ item: event }) => 
-            <EventListItem
-              event={event} 
-              booked={bookedEvents != null && bookedEvents.includes(event)}
-              onPress={() => openEventDetails(event.id) } />
-          } />
+        : <EventList 
+            events={events}
+            bookedEvents={bookedEvents}
+            onPress={openEventDetails} />
       }
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    name: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
+  container: {
+    flex: 1,
+    alignItems: 'center'
+  },
 });

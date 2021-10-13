@@ -1,5 +1,5 @@
 import Constants from 'expo-constants';
-import { isAuthenticated, getJwt } from '../auth/AuthState';
+import { isAuthenticated, getJwt } from '../auth/_AuthState';
 
 const baseUrl: string = Constants.manifest.extra?.backendUrl;
 
@@ -57,7 +57,7 @@ export const putAuth = async (endpoint: string, body: any) => {
   });
 }
 
-export const deleteAuth = async (endpoint: string, body: any) => {
+export const deleteAuth = async (endpoint: string) => {
   if (!await isAuthenticated()) {
     // TODO Raise some kind of exception
     console.error('deleteAuth: Not authenticated');
@@ -68,7 +68,6 @@ export const deleteAuth = async (endpoint: string, body: any) => {
     headers: {
       'Accept': 'application/json',
       'Authorization': `Bearer ${jwt}`,
-    },
-    body: JSON.stringify(body)
+    }
   });
 }

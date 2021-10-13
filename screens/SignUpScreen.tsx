@@ -8,41 +8,34 @@ import { ArkadButton } from '../components/Buttons';
 import { ArkadText } from '../components/StyledText';
 
 import { API } from '../api'
-import { AuthContext } from '../components/AuthContext';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../navigation';
 
-type LoginScreenParams = {
+type SignUpScreenParams = {
   navigation: StackNavigationProp<
     AuthStackParamList,
-    'LoginScreen'
+    'SignUpScreen'
   >;
 };
 
-export default function LoginScreen({ navigation }: LoginScreenParams) {
+export default function SignUpScreen({ navigation }: SignUpScreenParams) {
   const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const authContext = React.useContext(AuthContext);
 
-  const login = async () => {
-    // We get errors when unmounting for some reason, this might be a solution: 
-    // https://stackoverflow.com/questions/53949393/cant-perform-a-react-state-update-on-an-unmounted-component
-    // but I am not too sure of the call stack in this async call, it should be fine as the unmount is the last call
-    // It is probably because the state updates don't happen immediately.
+  const signUp = async () => {
     setLoading(true);
-    
-    const success = await API.auth.login(email, password);
-
+    const success = await API.signup.initialSignUp({ email, firstName, lastName });
     setLoading(false);
 
-    if (!success) {
-      alert('Login not successful');
-    }
-    else {
-      authContext.signIn();
+    if (success) {
+      alert('Account created, check your email for a link to finalize it before you can use it');
+    } else {
+      alert('Something went wrong, please try again');
     }
   }
+  
 
   return (
     <View style={styles.container}>
@@ -56,19 +49,22 @@ export default function LoginScreen({ navigation }: LoginScreenParams) {
           keyboardType="email-address"
           onChangeText={setEmail} />
         <TextInput
-          placeholder="Password"
-          secureTextEntry
-          onChangeText={setPassword} />
+          placeholder="First Name"
+          onChangeText={setFirstName} />
+        <TextInput
+          placeholder="Last Name"
+          onChangeText={setLastName} />
         { loading
-          ? <ActivityIndicator/>
-          : <ArkadButton onPress={login} style={{}}>
-              <ArkadText text='Login' style={{}}/>
-          </ArkadButton>
+        ? <ActivityIndicator/>
+        : <ArkadButton onPress={signUp} style={{}}>
+          <ArkadText text='Sign Up' style={{}}/>
+        </ArkadButton>
         }
-        <Pressable style={styles.signUpContainer} onPress={() => navigation.navigate('SignUpScreen') }>
-          <Text style={styles.signUpText}>Don't have an account? Sign up here!</Text>
+        <Pressable style={styles.loginContainer} onPress={() => navigation.navigate('LoginScreen') }>
+          <Text style={styles.loginText}>Already have an account? Login here!</Text>
         </Pressable>
       </View>
+      
     </View>
   );
 }
@@ -92,11 +88,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-  signUpContainer: {
+  loginContainer: {
     marginTop: 20,
     padding: 16,
   },
-  signUpText: {
+  loginText: {
     textAlign: 'center',
     textDecorationLine: 'underline',
   }

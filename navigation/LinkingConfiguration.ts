@@ -10,7 +10,9 @@ export default {
   prefixes: [Linking.makeUrl('/')],
   config: {
     screens: {
-      Login: 'login',
+      LoginScreen: 'login',
+      SignUpScreen: 'signup',
+      FinalizeSignUpScreen: 'finalize_signup/:token',
       Root: {
         screens: {
           Companies: {

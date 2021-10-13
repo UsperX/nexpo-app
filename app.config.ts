@@ -18,10 +18,11 @@ export default {
     '**/*'
   ],
   ios: {
+    bundleIdentifier: "se.tlth.arkad.nexpo",
     supportsTablet: true
   },
   android: {
-    package: 'se.arkadtlth.nexpo',
+    package: 'se.tlth.arkad.nexpo',
     adaptiveIcon: {
       foregroundImage: './assets/images/adaptive-icon.png',
       backgroundColor: '#022B5C',
@@ -31,6 +32,6 @@ export default {
     favicon: './assets/images/favicon.png'
   },
   extra: {
-    backendUrl: process.env.NEXPO_BACKEND_URL || 'https://nexpo.marfor.io/api',
+    backendUrl: process.env.NEXPO_BACKEND_URL || 'https://nexpo-nova.marfor.io/api',
   }
 }
