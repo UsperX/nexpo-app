@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 
 import { Text, View } from '../components/Themed';
 
@@ -42,6 +42,12 @@ export default function CompanyDetailsScreen({ route }: CompanyDetailsScreenPara
 
   return (
     <View style={styles.container}>
+      <View style={styles.container}>
+        <Image 
+          source={{uri:company.logoUrl}}
+          style={styles.logo} 
+          defaultSource={require('../assets/images/icon.png')} />
+      </View>
       <View style={styles.nameContainer}>
         <ArkadText
             text={company?.name}
@@ -96,5 +102,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 40,
     justifyContent: 'center'
+  },
+  logo: {
+    width: 80,
+    height: 80,
   },
 });
