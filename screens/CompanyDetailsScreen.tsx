@@ -44,7 +44,7 @@ export default function CompanyDetailsScreen({ route }: CompanyDetailsScreenPara
     <View style={styles.container}>
       <View style={styles.container}>
         <Image 
-          source={{uri:company.logoUrl}}
+          source={ company.logoUrl ? {uri: company.logoUrl} : require('../assets/images/icon.png')}
           style={styles.logo} 
           defaultSource={require('../assets/images/icon.png')} />
       </View>
